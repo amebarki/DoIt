@@ -8,69 +8,45 @@
 
 import UIKit
 
-class ListViewController: UIViewController {
-    
-    var documentDirectory: URL {
-        let fm = FileManager.default
-        return try! fm.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-    }
-    
-    var dataFileUrl : URL {
-        return documentDirectory.appendingPathComponent("checklist").appendingPathExtension("json")
-    }
+class ListViewController: UIViewController
+{
     
     var items = ["Pain","Lait","Boeuf",
                  "Oeufs","Fromage","Poivrons",
                  "Blé","Coeurs de palmier","Tomates",
                  "Olives","Cornichons"]
     
-    var cacheItems = [Item]()
     
+    //MARK: variables
     var filtered = [Item]()
     
-    var searchActive : Bool = false
-    
+    var dataManagerReference = DataManager.instance
     
     //MARK:  Outlets
-    
     @IBOutlet weak var searchBarView: UISearchBar!
-    
     @IBOutlet weak var tableView: UITableView!
     
     
     
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
         
-        if(FileManager.default.fileExists(atPath: dataFileUrl.path))
-        {
-            loadChecklist()
-        }
-        //createItems()
         // in the case where it didn't specify in the storyboard
         //tableView.dataSource = self
         //tableView.delegate = self
+    
+        dataManagerReference.loadChecklist()
         
-        filtered.append(contentsOf: cacheItems)
-        
+        filtered.append(contentsOf: dataManagerReference.cacheItems)
     }
-    
-    
-    func createItems(){
-        for item in items {
-            let newElement = Item(name: item)
-            cacheItems.append(newElement)
-        }
-    }
-    
     
     //MARK: Actions
-    
-    @IBAction func editAction(_ sender: Any) {
-        //   let editButton = sender as! UIBarButtonItem
+    @IBAction func editAction(_ sender: Any)
+    {
         tableView.isEditing = !tableView.isEditing
-        
     }
+    
     @IBAction func addAction(_ sender: Any)
     {
         let alertController = UIAlertController(title: "DoIt", message: "New Item", preferredStyle: .alert)
@@ -81,10 +57,10 @@ class ListViewController: UIViewController {
             
             if textField.text != "" {
                 let item = Item(name: textField.text!)
-                self.cacheItems.append(item)
+                self.dataManagerReference.cacheItems.append(item)
                 self.filtered.removeAll()
-                self.filtered.append(contentsOf: self.cacheItems)
-                self.saveChecklist()
+                self.filtered.append(contentsOf: self.dataManagerReference.filter(searchBarText: self.searchBarView.text!))
+                self.dataManagerReference.saveChecklist()
                 self.tableView.reloadData()
             }
         }
@@ -96,92 +72,62 @@ class ListViewController: UIViewController {
         
         present(alertController, animated: true, completion: nil)
     }
-    
-    
-    //MARK: methods JSON
-    
-    func saveChecklist()
-    {
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        let data = try! encoder.encode(cacheItems)
-        try! data.write(to: dataFileUrl)
-        //print(String(data: data, encoding: .utf8)!)
-    }
-    
-    func loadChecklist()
-    {
-        let jsonData = try! Data(contentsOf: dataFileUrl, options: .alwaysMapped)
-        let decoder = JSONDecoder()
-        let data = try! decoder.decode([Item].self, from: jsonData)
-        for checklist in data {
-            cacheItems.append(checklist)
-        }
-    }
-    
-    
 }
 
 
-extension ListViewController: UITableViewDataSource, UITableViewDelegate{
+//MARK: Extension ListViewController
+extension ListViewController: UITableViewDataSource, UITableViewDelegate
+{
     
     //MARK: UITableViewDataSource
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
         return filtered.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListViewCellIdentifier")
-        
         let item = filtered[indexPath.row]
-        //cell?.textLabel?.text = items2[indexPath.row]
         cell?.textLabel?.text = item.name
         cell?.accessoryType = item.checked ? .checkmark : .none
+        
         return cell!
     }
     
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        
-        let sourceItem = cacheItems.remove(at:sourceIndexPath.row)
-        cacheItems.insert(sourceItem, at: destinationIndexPath.row)
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
+    {
+        let sourceItem = dataManagerReference.cacheItems.remove(at:sourceIndexPath.row)
+        dataManagerReference.cacheItems.insert(sourceItem, at: destinationIndexPath.row)
         filtered.removeAll()
-        filtered.append(contentsOf: cacheItems)
-        saveChecklist()
+        filtered.append(contentsOf: dataManagerReference.cacheItems)
+        dataManagerReference.saveChecklist()
     }
     
     //MARK: UITableViewDelegate
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
         tableView.deselectRow(at: indexPath, animated: false)
-        //cell?.accessoryType = (cell?.accessoryType == .checkmark) ? .none : .checkmark
-        
         let item = filtered[indexPath.row % filtered.count]
-        
         item.checked = !item.checked
-        
         tableView.reloadRows(at: [indexPath], with: .automatic)
-        saveChecklist()
+        DataManager.instance.saveChecklist()
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == UITableViewCellEditingStyle.delete {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) 
+    {
+        if editingStyle == UITableViewCellEditingStyle.delete
+        {
             let item = filtered[indexPath.row]
-            if let index = cacheItems.index(where: { (anItem) -> Bool in
+            if let index = dataManagerReference.cacheItems.index(where: { (anItem) -> Bool in
                 return anItem === item
             })
             {
-                cacheItems.remove(at: index)
+                dataManagerReference.cacheItems.remove(at: index)
                 filtered.remove(at: indexPath.row)
-                //filtered.removeAll()
-                //filtered.append(contentsOf: cacheItems)
-                
                 tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-                saveChecklist()
-        
-                
-
+                dataManagerReference.saveChecklist()
             }
         }
     }
@@ -206,21 +152,11 @@ extension ListViewController: UISearchBarDelegate
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if(searchText == ""){
             filtered.removeAll()
-            filtered.append(contentsOf: cacheItems)
+            filtered.append(contentsOf: dataManagerReference.cacheItems)
         }
         else{
-            filtered = cacheItems.filter({ (item) -> Bool in
-                let nameItem = item.name
-                let range = nameItem.range(of: searchText, options: String.CompareOptions.caseInsensitive, range: nil, locale: nil)
-                return range != nil
-            })
+            filtered = dataManagerReference.filter(searchBarText: searchText)
         }
-        
-        
         self.tableView.reloadData()
-        
     }
-    
-    
-    
 }
