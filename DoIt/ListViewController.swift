@@ -168,14 +168,21 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate{
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCellEditingStyle.delete {
             let item = filtered[indexPath.row]
-            let index = try? cacheItems.index(where: item){
+            if let index = cacheItems.index(where: { (anItem) -> Bool in
+                return anItem === item
+            })
+            {
                 cacheItems.remove(at: index)
+                filtered.remove(at: indexPath.row)
+                //filtered.removeAll()
+                //filtered.append(contentsOf: cacheItems)
+                
+                tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+                saveChecklist()
+        
+                
+
             }
-            filtered.removeAll()
-            filtered.append(contentsOf: cacheItems)
-            tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-            
-            saveChecklist()
         }
     }
 }
