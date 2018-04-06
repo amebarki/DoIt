@@ -106,6 +106,8 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate
         
         configureCheckmark(for: cell!, withItem: item)
         configureName(for: cell!, withItem: item)
+        configureCategorie(for: cell!, withItem: item)
+        configureDate(for: cell!, withItem: item)
         
         return cell!
     }
@@ -159,16 +161,25 @@ extension ListViewController {
         let myCell = cell as! ItemCell
         myCell.itemName.text = item.name
     }
+    
+    func configureCategorie(for cell: UITableViewCell, withItem item: Item) {
+        let myCell = cell as! ItemCell
+        //TODO: myCell.itemCategorie.text = item.categorie
+        myCell.itemCategory.text = "Catégorie"
+    }
+    
+    func configureDate(for cell: UITableViewCell, withItem item: Item) {
+        let myCell = cell as! ItemCell
+        //TODO: myCell.itemDate.text = item.date
+        myCell.itemDate.text = "Date"
+    }
 }
 
 extension ListViewController: UISearchBarDelegate
 {
-<<<<<<< HEAD
+    
     //MARK: - SearchbarView
     
-=======
-    //MARK: SearchbarView
->>>>>>> master
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
     }
     
@@ -190,5 +201,30 @@ extension ListViewController: UISearchBarDelegate
             filtered = dataManagerReference.filter(searchBarText: searchText)
         }
         self.tableView.reloadData()
+    }
+}
+
+// MARK: - AddItemViewControllerDelegate
+extension ListViewController: ItemDetailViewControllerDelegate {
+    
+    func ItemDetailViewControllerDidCancel(_ controller: ItemDetailViewController) {
+        controller.dismiss(animated: true)
+    }
+    
+    func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishAddingItem item: Item) {
+        filtered.append(item)
+        tableView.reloadData()
+        
+        //TODO TODO TODO TODO
+        controller.dismiss(animated: true)
+    }
+    
+    func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishEditingItem item: Item) {
+        let index = filtered.index(where:{ $0 === item })!
+        tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        
+        //TODO TODO TODO TODO
+        controller.dismiss(animated: true)
+        
     }
 }
