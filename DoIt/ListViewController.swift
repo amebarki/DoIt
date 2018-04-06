@@ -17,12 +17,12 @@ class ListViewController: UIViewController
                  "Olives","Cornichons"]
     
     
-    //MARK: variables
+    //MARK: - variables
     var filtered = [Item]()
     
     var dataManagerReference = DataManager.instance
     
-    //MARK:  Outlets
+    //MARK: - Outlets
     @IBOutlet weak var searchBarView: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
@@ -41,7 +41,7 @@ class ListViewController: UIViewController
         filtered.append(contentsOf: dataManagerReference.cacheItems)
     }
     
-    //MARK: Actions
+    //MARK: - Actions
     @IBAction func editAction(_ sender: Any)
     {
         tableView.isEditing = !tableView.isEditing
@@ -75,11 +75,11 @@ class ListViewController: UIViewController
 }
 
 
-//MARK: Extension ListViewController
+//MARK: - Extension ListViewController
 extension ListViewController: UITableViewDataSource, UITableViewDelegate
 {
     
-    //MARK: UITableViewDataSource
+    //MARK:  - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return filtered.count
@@ -90,8 +90,9 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListViewCellIdentifier")
         let item = filtered[indexPath.row]
-        cell?.textLabel?.text = item.name
-        cell?.accessoryType = item.checked ? .checkmark : .none
+        
+        configureCheckmark(for: cell!, withItem: item)
+        configureName(for: cell!, withItem: item)
         
         return cell!
     }
@@ -105,7 +106,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate
         dataManagerReference.saveChecklist()
     }
     
-    //MARK: UITableViewDelegate
+    //MARK:  - UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         tableView.deselectRow(at: indexPath, animated: false)
@@ -133,9 +134,22 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate
     }
 }
 
+extension ListViewController {
+    //MARK: - Configure Cell
+    func configureCheckmark(for cell: UITableViewCell, withItem item: Item) {
+        let myCell = cell as! ItemCell
+        myCell.itemChecked.isHidden = (item.checked) ? false : true
+    }
+    
+    func configureName(for cell: UITableViewCell, withItem item: Item){
+        let myCell = cell as! ItemCell
+        myCell.itemName.text = item.name
+    }
+}
+
 extension ListViewController: UISearchBarDelegate
 {
-    //MARK: SearchbarView
+    //MARK: - SearchbarView
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
     }
