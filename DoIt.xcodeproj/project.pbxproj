@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B87111E02077AEBD000ED3A8 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87111DF2077AEBD000ED3A8 /* CategoryViewController.swift */; };
 		B87BCBBB206E1FF200FF4FA6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87BCBBA206E1FF200FF4FA6 /* AppDelegate.swift */; };
 		B87BCBBD206E1FF200FF4FA6 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87BCBBC206E1FF200FF4FA6 /* ListViewController.swift */; };
 		B87BCBC0206E1FF200FF4FA6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B87BCBBE206E1FF200FF4FA6 /* Main.storyboard */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B87111DF2077AEBD000ED3A8 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		B87BCBB7206E1FF200FF4FA6 /* DoIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DoIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B87BCBBA206E1FF200FF4FA6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B87BCBBC206E1FF200FF4FA6 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 				B87BCBCF206E242E00FF4FA6 /* ListTableViewCell.swift */,
 				B87BCBD1206E314300FF4FA6 /* Item.swift */,
 				B87BCBD3206E7BB900FF4FA6 /* DataManager.swift */,
+				B87111DF2077AEBD000ED3A8 /* CategoryViewController.swift */,
 			);
 			path = DoIt;
 			sourceTree = "<group>";
@@ -150,6 +153,7 @@
 			files = (
 				B87BCBD2206E314300FF4FA6 /* Item.swift in Sources */,
 				B87BCBD4206E7BB900FF4FA6 /* DataManager.swift in Sources */,
+				B87111E02077AEBD000ED3A8 /* CategoryViewController.swift in Sources */,
 				B87BCBC3206E1FF200FF4FA6 /* DoIt.xcdatamodeld in Sources */,
 				B87BCBD0206E242E00FF4FA6 /* ListTableViewCell.swift in Sources */,
 				B87BCBBD206E1FF200FF4FA6 /* ListViewController.swift in Sources */,

@@ -15,6 +15,7 @@ class ListViewController: UIViewController
     var filtered = [Item]()
     
     var dataManagerReference = DataManager.instance
+    
     @IBOutlet weak var editItemBarView: UIBarButtonItem!
     
     //MARK:  Outlets
