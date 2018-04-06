@@ -18,94 +18,18 @@ class DataManager{
         return persistentContainer.viewContext
     }
     
-    var cacheItems = [Item]()
-    
-    var documentDirectory: URL
-    {
-        let fm = FileManager.default
-        return try! fm.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-    }
-    
-    var dataFileUrl : URL
-    {
-        return documentDirectory.appendingPathComponent("checklist").appendingPathExtension("json")
-    }
+    private var cachedItems = [Item]()
+    private var cachedCategories = [Category]()
     
     static let instance = DataManager()
     
     
     
-    func moveItemAt(sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
-    {
-        let sourceItem = cacheItems.remove(at:sourceIndexPath.row)
-        cacheItems.insert(sourceItem, at: destinationIndexPath.row)
-    }
-    
-    
-    func filter(searchBarText: String) -> [Item]
-    {
-        if(searchBarText != "")
-        {
-            return cacheItems.filter({ (item) -> Bool in
-                let nameItem = item.name
-                let range = nameItem?.range(of: searchBarText, options: [String.CompareOptions.caseInsensitive,String.CompareOptions.diacriticInsensitive], range: nil, locale: nil)
-                return range != nil
-            })
-        }
-        else
-        {
-            return cacheItems
-        }
-        
-    }
-    
-    func filter(searchBarText: String) -> [Item]
-    {
-        
-        let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
-        let predicate = NSPredicate(format: "name contains[cd] %@", searchBarText)
-        fetchRequest.predicate = predicate
-        do{
-            items = try context.fetch(fetchRequest)
-        }catch{
-            print(à)
-        }
-    }
-    
-    func loadData()
-    {
-        cacheItems.removeAll()
-        let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
-        do
-        {
-            let fetchedResults = try  persistentContainer.viewContext.fetch(fetchRequest)
-            cacheItems = fetchedResults
-        }
-        catch let error as NSError
-        {
-            debugPrint("Could not fetch : \(error)")
-        }
-        
-    }
-    
-    
+
     func saveData()
     {
         saveContext()
     }
-    
-    func deleteDataItem(item: Item)
-    {
-        if let index = cacheItems.index(where: { (anItem) -> Bool in
-            return anItem === item
-        })
-        {
-            cacheItems.remove(at: index)
-        }
-        context.delete(item)
-        self.saveData()
-    }
-    
     
     
    
@@ -139,7 +63,6 @@ class DataManager{
     }()
     
     // MARK: - Core Data Saving support
-    
     func saveContext () {
         let context = persistentContainer.viewContext
         if context.hasChanges {
@@ -155,15 +78,160 @@ class DataManager{
     }
 }
 
-
+//MARK: Manage Category
 extension DataManager
 {
+    func loadCategoryData(text:String? = "") ->[Category]
+    {
+        let fetchRequest: NSFetchRequest<Category> = NSFetchRequest(entityName: "Category")
+        if text != nil, text!.count > 0
+        {
+            let predicate = NSPredicate(format: "name contains[cd] %@", text!)
+            fetchRequest.predicate = predicate
+            do{
+                cachedCategories = try context.fetch(fetchRequest)
+            }catch{
+                print("error")
+            }
+        }
+        else
+        {
+            cachedCategories.removeAll()
+            do
+            {
+                let fetchedResults = try  context.fetch(fetchRequest)
+                cachedCategories = fetchedResults
+            }
+            catch let error as NSError
+            {
+                debugPrint("Could not fetch : \(error)")
+            }
+        }
+        return cachedCategories
+    }
+    
+    func addCategoryData(category: Category)
+    {
+        cachedCategories.append(category)
+        saveData()
+    }
+    
+    func deleteCategoryData(category: Category)
+    {
+        if let index = cachedCategories.index(where: { (anCategory) -> Bool in
+            return anCategory === category
+        })
+        {
+            cachedCategories.remove(at: index)
+        }
+        context.delete(category)
+        self.saveData()
+    }
+    
+    
+    func retrieveCategoryItemsData(categoryName: String) -> [Item]
+    {
+        let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
+        let predicate = NSPredicate(format: "name == %@", categoryName)
+        fetchRequest.predicate = predicate
+        do{
+            cachedItems = try context.fetch(fetchRequest)
+        }catch{
+            print("error")
+        }
+        return cachedItems
+    }
+}
+
+
+//MARK: Manage Item
+extension DataManager
+{
+    func moveItemAt(sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) -> [Item]
+    {
+        let sourceItem = cachedItems.remove(at:sourceIndexPath.row)
+        cachedItems.insert(sourceItem, at: destinationIndexPath.row)
+        return cachedItems
+    }
+    
+    func loadItemsData(text:String? = "") -> [Item]
+    {
+        if text != nil, text!.count > 0
+        {
+            let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
+            let predicate = NSPredicate(format: "name contains[cd] %@", text!)
+            fetchRequest.predicate = predicate
+            do{
+                cachedItems = try context.fetch(fetchRequest)
+            }catch{
+                print("error")
+            }
+        }
+        else
+        {
+            cachedItems.removeAll()
+            let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
+            do
+            {
+                let fetchedResults = try  persistentContainer.viewContext.fetch(fetchRequest)
+                cachedItems = fetchedResults
+            }
+            catch let error as NSError
+            {
+                debugPrint("Could not fetch : \(error)")
+            }
+        }
+        return cachedItems
+    }
+    
+    func addItemData(item:Item)
+    {
+        cachedItems.append(item)
+        saveData()
+    }
+    
+
+    func deleteItemData(item: Item)
+    {
+        if let index = cachedItems.index(where: { (anItem) -> Bool in
+            return anItem === item
+        })
+        {
+            cachedItems.remove(at: index)
+        }
+        context.delete(item)
+        self.saveData()
+    }
+    
+    
+    func retrieveItemData(index: Int) -> Item
+    {
+        return cachedItems[index]
+    }
+}
+
+
+
+// MARK: Manage Json
+extension DataManager
+{
+    var documentDirectory: URL
+    {
+        let fm = FileManager.default
+        return try! fm.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+    }
+    
+    var dataFileUrl : URL
+    {
+        return documentDirectory.appendingPathComponent("checklist").appendingPathExtension("json")
+    }
+    
     //MARK: methods JSON old save
     func saveChecklist()
     {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
-        let data = try! encoder.encode(cacheItems)
+        let data = try! encoder.encode(cachedItems)
         try! data.write(to: dataFileUrl)
         //print(String(data: data, encoding: .utf8)!)
     }
@@ -176,9 +244,23 @@ extension DataManager
             let decoder = JSONDecoder()
             let data = try! decoder.decode([Item].self, from: jsonData)
             for checklist in data {
-                cacheItems.append(checklist)
+                cachedItems.append(checklist)
             }
         }
     }
-    
+    func filter(searchBarText: String) -> [Item]
+    {
+        if(searchBarText != "")
+        {
+            return cachedItems.filter({ (item) -> Bool in
+                let nameItem = item.name
+                let range = nameItem?.range(of: searchBarText, options: [String.CompareOptions.caseInsensitive,String.CompareOptions.diacriticInsensitive], range: nil, locale: nil)
+                return range != nil
+            })
+        }
+        else
+        {
+            return cachedItems
+        }
+    }
 }
