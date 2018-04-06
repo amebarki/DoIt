@@ -103,6 +103,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="editItemBarView" destination="v5t-oX-ric" id="A5c-Zk-qBl"/>
                         <outlet property="searchBarView" destination="uqn-Fz-YNR" id="jU3-bg-mxj"/>
                         <outlet property="tableView" destination="WkV-Pb-G12" id="6XY-CK-FlU"/>
                     </connections>
