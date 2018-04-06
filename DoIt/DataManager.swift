@@ -59,6 +59,19 @@ class DataManager{
         
     }
     
+    func filter(searchBarText: String) -> [Item]
+    {
+        
+        let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
+        let predicate = NSPredicate(format: "name contains[cd] %@", searchBarText)
+        fetchRequest.predicate = predicate
+        do{
+            items = try context.fetch(fetchRequest)
+        }catch{
+            print(à)
+        }
+    }
+    
     func loadData()
     {
         cacheItems.removeAll()

@@ -10,13 +10,7 @@ import UIKit
 
 class ListViewController: UIViewController
 {
-    
-    var items = ["Pain","Lait","Boeuf",
-                 "Oeufs","Fromage","Poivrons",
-                 "Blé","Coeurs de palmier","Tomates",
-                 "Olives","Cornichons"]
-    
-    
+
     //MARK: variables
     var filtered = [Item]()
     
@@ -38,7 +32,7 @@ class ListViewController: UIViewController
         //tableView.delegate = self
     
        // dataManagerReference.loadChecklist()
-            dataManagerReference.loadData()
+        dataManagerReference.loadData()
         filtered.append(contentsOf: dataManagerReference.cacheItems)
     }
     
