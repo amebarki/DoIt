@@ -13,7 +13,7 @@ class ListViewController: UIViewController
 
     //MARK: variables
     var filtered = [Item]()
-    
+    var category: Category?
     var dataManagerReference = DataManager.instance
     
     @IBOutlet weak var editItemBarView: UIBarButtonItem!
@@ -59,10 +59,8 @@ class ListViewController: UIViewController
             let textField = alertController.textFields![0]
             
             if textField.text != "" {
-                let item = Item(context: DataManager.instance.context)
-                item.name = textField.text
-                item.checked = false
-                self.dataManagerReference.addItemData(item: item)
+              
+                self.dataManagerReference.addItemData(nameItem: textField.text!)
                 self.filtered.removeAll()
                 self.filtered.append(contentsOf: self.dataManagerReference.loadItemsData(text: self.searchBarView.text!))
                 self.tableView.reloadData()
@@ -160,3 +158,5 @@ extension ListViewController: UISearchBarDelegate
         self.tableView.reloadData()
     }
 }
+
+

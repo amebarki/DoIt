@@ -23,7 +23,7 @@ class DataManager{
     
     static let instance = DataManager()
     
-    
+   
     
 
     func saveData()
@@ -99,8 +99,11 @@ extension DataManager
         return cachedCategories
     }
     
-    func addCategoryData(category: Category)
+    func addCategoryData(nameCategory: String)
     {
+        let category = Category(context: DataManager.instance.context)
+        category.name = nameCategory
+        category.createdAt = Date()
         cachedCategories.append(category)
         saveData()
     }
@@ -121,7 +124,7 @@ extension DataManager
     func retrieveCategoryItemsData(categoryName: String) -> [Item]
     {
         let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
-        let predicate = NSPredicate(format: "category == %@", categoryName)
+        let predicate = NSPredicate(format: "%K == %@", #keyPath(Item.category.name),categoryName)
         fetchRequest.predicate = predicate
         do{
             cachedItems = try context.fetch(fetchRequest)
@@ -130,6 +133,8 @@ extension DataManager
         }
         return cachedItems
     }
+    
+
 }
 
 
@@ -162,8 +167,11 @@ extension DataManager
     }
     
     
-    func addItemData(item:Item)
+    func addItemData(nameItem: String)
     {
+        let item = Item(context: DataManager.instance.context)
+        item.name = nameItem
+        item.checked = false
         cachedItems.append(item)
         saveData()
     }

@@ -109,11 +109,11 @@
                                     </connections>
                                 </searchBar>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CategoryViewCellIdentifier" id="eQc-kb-IRY">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="CategoryViewCellIdentifier" id="eQc-kb-IRY">
                                         <rect key="frame" x="0.0" y="72" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="eQc-kb-IRY" id="xlu-3b-lmZ">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="79.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -128,6 +128,11 @@
                         <viewLayoutGuide key="safeArea" id="Py9-st-f5r"/>
                     </view>
                     <navigationItem key="navigationItem" title="Categories" id="gtm-nn-Fma">
+                        <barButtonItem key="leftBarButtonItem" systemItem="organize" id="uSS-As-Pc3">
+                            <connections>
+                                <action selector="FilterAction:" destination="s2o-wh-dS3" id="in8-LS-zFf"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="F3x-SE-9oa">
                             <connections>
                                 <action selector="addAction:" destination="s2o-wh-dS3" id="Xdc-fL-Dke"/>

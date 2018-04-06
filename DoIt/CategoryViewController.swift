@@ -17,6 +17,8 @@ class CategoryViewController: UIViewController {
     var filtered = [Category]()
 
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -34,10 +36,7 @@ class CategoryViewController: UIViewController {
             let textField = alertController.textFields![0]
             
             if textField.text != "" {
-                let category = Category(context: DataManager.instance.context)
-                category.name = textField.text
-                category.createdAt = Date()
-                self.dataManagerReference.addCategoryData(category: category)
+                self.dataManagerReference.addCategoryData(nameCategory: textField.text!)
                 self.filtered.removeAll()
                 self.filtered.append(contentsOf: self.dataManagerReference.loadCategoryData(text: self.searchBarView.text!))
                 self.tableView.reloadData()
@@ -51,6 +50,12 @@ class CategoryViewController: UIViewController {
         
         present(alertController, animated: true, completion: nil)
     }
+    
+    
+    @IBAction func FilterAction(_ sender: Any) {
+    }
+    
+
 }
     
     
@@ -64,15 +69,24 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate
     //MARK: UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return filtered.count
+        return section == 0 ? 1 : filtered.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryViewCellIdentifier")
-        let category = filtered[indexPath.row]
-        cell?.textLabel?.text = category.name
+        if indexPath.section == 0
+        {
+            cell?.textLabel?.text = "None"
+        }
+        else
+        {
+            let category = filtered[indexPath.row]
+            cell?.textLabel?.text = category.name
+            
+        }
         return cell!
     }
     
@@ -80,10 +94,13 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         tableView.deselectRow(at: indexPath, animated: false)
-        _ = filtered[indexPath.row % filtered.count]
         tableView.reloadRows(at: [indexPath], with: .automatic)
         dataManagerReference.saveData()
         
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return indexPath.section != 0
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath)
@@ -95,6 +112,11 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate
             filtered.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
         }
+    }
+    
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
     }
 }
 
