@@ -38,7 +38,7 @@ class ListViewController: UIViewController
         //tableView.delegate = self
     
        // dataManagerReference.loadChecklist()
-        
+            dataManagerReference.loadData()
         filtered.append(contentsOf: dataManagerReference.cacheItems)
     }
     
@@ -134,15 +134,9 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate
         if editingStyle == UITableViewCellEditingStyle.delete
         {
             let item = filtered[indexPath.row]
-            if let index = dataManagerReference.cacheItems.index(where: { (anItem) -> Bool in
-                return anItem === item
-            })
-            {
-                dataManagerReference.cacheItems.remove(at: index)
-                filtered.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-                dataManagerReference.saveData()
-            }
+            dataManagerReference.deleteDataItem(item: item)
+            filtered.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
         }
     }
 }

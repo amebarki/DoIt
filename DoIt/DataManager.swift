@@ -11,6 +11,13 @@ import CoreData
 
 class DataManager{
     
+    
+    //MARK: Declaration Property and variables
+    var context: NSManagedObjectContext
+    {
+        return persistentContainer.viewContext
+    }
+    
     var cacheItems = [Item]()
     
     var documentDirectory: URL
@@ -24,8 +31,15 @@ class DataManager{
         return documentDirectory.appendingPathComponent("checklist").appendingPathExtension("json")
     }
     
-    
     static let instance = DataManager()
+    
+    
+    
+    func moveItemAt(sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
+    {
+        let sourceItem = cacheItems.remove(at:sourceIndexPath.row)
+        cacheItems.insert(sourceItem, at: destinationIndexPath.row)
+    }
     
     
     func filter(searchBarText: String) -> [Item]
@@ -47,13 +61,16 @@ class DataManager{
     
     func loadData()
     {
+        cacheItems.removeAll()
         let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
         do
         {
             let fetchedResults = try  persistentContainer.viewContext.fetch(fetchRequest)
+            cacheItems = fetchedResults
         }
         catch let error as NSError
-        { print("Could not fetch : \(error)")
+        {
+            debugPrint("Could not fetch : \(error)")
         }
         
     }
@@ -63,6 +80,21 @@ class DataManager{
     {
         saveContext()
     }
+    
+    func deleteDataItem(item: Item)
+    {
+        if let index = cacheItems.index(where: { (anItem) -> Bool in
+            return anItem === item
+        })
+        {
+            cacheItems.remove(at: index)
+        }
+        context.delete(item)
+        self.saveData()
+    }
+    
+    
+    
    
     // MARK: - Core Data stack
     
