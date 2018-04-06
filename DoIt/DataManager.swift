@@ -132,7 +132,7 @@ extension DataManager
     func retrieveCategoryItemsData(categoryName: String) -> [Item]
     {
         let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
-        let predicate = NSPredicate(format: "name == %@", categoryName)
+        let predicate = NSPredicate(format: "category == %@", categoryName)
         fetchRequest.predicate = predicate
         do{
             cachedItems = try context.fetch(fetchRequest)
