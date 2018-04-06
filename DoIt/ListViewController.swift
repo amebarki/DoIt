@@ -10,14 +10,6 @@ import UIKit
 
 class ListViewController: UIViewController
 {
-    
-    var items = ["Pain","Lait","Boeuf",
-                 "Oeufs","Fromage","Poivrons",
-                 "Blé","Coeurs de palmier","Tomates",
-                 "Olives","Cornichons"]
-    
-    
-    //MARK: - variables
     var filtered = [Item]()
     
     var dataManagerReference = DataManager.instance
@@ -36,10 +28,7 @@ class ListViewController: UIViewController
         // in the case where it didn't specify in the storyboard
         //tableView.dataSource = self
         //tableView.delegate = self
-    
-       // dataManagerReference.loadChecklist()
-        
-        filtered.append(contentsOf: dataManagerReference.cacheItems)
+        filtered.append(contentsOf: dataManagerReference.loadItemsData())
     }
     
     //MARK: - Actions
@@ -67,13 +56,12 @@ class ListViewController: UIViewController
             let textField = alertController.textFields![0]
             
             if textField.text != "" {
-                let item = Item(context: DataManager.instance.persistentContainer.viewContext)
+                let item = Item(context: DataManager.instance.context)
                 item.name = textField.text
                 item.checked = false
-                self.dataManagerReference.cacheItems.append(item)
+                self.dataManagerReference.addItemData(item: item)
                 self.filtered.removeAll()
-                self.filtered.append(contentsOf: self.dataManagerReference.filter(searchBarText: self.searchBarView.text!))
-                self.dataManagerReference.saveData()
+                self.filtered.append(contentsOf: self.dataManagerReference.loadItemsData(text: self.searchBarView.text!))
                 self.tableView.reloadData()
             }
         }
@@ -114,11 +102,12 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
     {
-        let sourceItem = dataManagerReference.cacheItems.remove(at:sourceIndexPath.row)
-        dataManagerReference.cacheItems.insert(sourceItem, at: destinationIndexPath.row)
+        
+     /*   dataManagerReference.moveItemAt(sourceIndexPath: sourceIndexPath, to: destinationIndexPath)
+
+       */
         filtered.removeAll()
-        filtered.append(contentsOf: dataManagerReference.cacheItems)
-        dataManagerReference.saveData()
+        filtered.append(contentsOf: dataManagerReference.moveItemAt(sourceIndexPath: sourceIndexPath, to: destinationIndexPath))
     }
     
     //MARK:  - UITableViewDelegate
@@ -137,15 +126,9 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate
         if editingStyle == UITableViewCellEditingStyle.delete
         {
             let item = filtered[indexPath.row]
-            if let index = dataManagerReference.cacheItems.index(where: { (anItem) -> Bool in
-                return anItem === item
-            })
-            {
-                dataManagerReference.cacheItems.remove(at: index)
-                filtered.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-                dataManagerReference.saveData()
-            }
+            dataManagerReference.deleteItemData(item: item)
+            filtered.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
         }
     }
 }
@@ -195,10 +178,11 @@ extension ListViewController: UISearchBarDelegate
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if(searchText == ""){
             filtered.removeAll()
-            filtered.append(contentsOf: dataManagerReference.cacheItems)
+            filtered.append(contentsOf: dataManagerReference.loadItemsData())
         }
         else{
-            filtered = dataManagerReference.filter(searchBarText: searchText)
+            //filtered = dataManagerReference.filter(searchBarText: searchText)
+            filtered = dataManagerReference.loadItemsData(text: searchText)
         }
         self.tableView.reloadData()
     }
