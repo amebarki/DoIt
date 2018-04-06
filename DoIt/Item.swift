@@ -9,7 +9,7 @@
 import Foundation
 
 
-class Item: Codable{
+/*class Item: Codable{
     
     var name: String
     var checked = false
@@ -20,3 +20,4 @@ class Item: Codable{
     }
     
 }
+*/

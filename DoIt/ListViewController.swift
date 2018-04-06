@@ -21,6 +21,7 @@ class ListViewController: UIViewController
     var filtered = [Item]()
     
     var dataManagerReference = DataManager.instance
+    @IBOutlet weak var editItemBarView: UIBarButtonItem!
     
     //MARK:  Outlets
     @IBOutlet weak var searchBarView: UISearchBar!
@@ -36,7 +37,7 @@ class ListViewController: UIViewController
         //tableView.dataSource = self
         //tableView.delegate = self
     
-        dataManagerReference.loadChecklist()
+       // dataManagerReference.loadChecklist()
         
         filtered.append(contentsOf: dataManagerReference.cacheItems)
     }
@@ -45,6 +46,16 @@ class ListViewController: UIViewController
     @IBAction func editAction(_ sender: Any)
     {
         tableView.isEditing = !tableView.isEditing
+        if(tableView.isEditing)
+        {
+            let doneButtonView = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(editAction(_:)))
+            navigationItem.setLeftBarButton(doneButtonView, animated: true)
+        }
+        else
+        {
+            let editButtonView = UIBarButtonItem(barButtonSystemItem: .edit , target: self, action: #selector(editAction(_:)))
+            navigationItem.setLeftBarButton(editButtonView, animated: true)
+        }
     }
     
     @IBAction func addAction(_ sender: Any)
@@ -56,11 +67,13 @@ class ListViewController: UIViewController
             let textField = alertController.textFields![0]
             
             if textField.text != "" {
-                let item = Item(name: textField.text!)
+                let item = Item(context: DataManager.instance.persistentContainer.viewContext)
+                item.name = textField.text
+                item.checked = false
                 self.dataManagerReference.cacheItems.append(item)
                 self.filtered.removeAll()
                 self.filtered.append(contentsOf: self.dataManagerReference.filter(searchBarText: self.searchBarView.text!))
-                self.dataManagerReference.saveChecklist()
+                self.dataManagerReference.saveData()
                 self.tableView.reloadData()
             }
         }
@@ -102,7 +115,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate
         dataManagerReference.cacheItems.insert(sourceItem, at: destinationIndexPath.row)
         filtered.removeAll()
         filtered.append(contentsOf: dataManagerReference.cacheItems)
-        dataManagerReference.saveChecklist()
+        dataManagerReference.saveData()
     }
     
     //MARK: UITableViewDelegate
@@ -112,7 +125,8 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate
         let item = filtered[indexPath.row % filtered.count]
         item.checked = !item.checked
         tableView.reloadRows(at: [indexPath], with: .automatic)
-        DataManager.instance.saveChecklist()
+        dataManagerReference.saveData()
+
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) 
@@ -127,7 +141,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate
                 dataManagerReference.cacheItems.remove(at: index)
                 filtered.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-                dataManagerReference.saveChecklist()
+                dataManagerReference.saveData()
             }
         }
     }
@@ -136,7 +150,6 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate
 extension ListViewController: UISearchBarDelegate
 {
     //MARK: SearchbarView
-    
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
     }
     
