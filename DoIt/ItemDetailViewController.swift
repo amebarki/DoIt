@@ -9,7 +9,11 @@
 import UIKit
 
 class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
+    @IBOutlet weak var itemImageView: UIImageView!
     @IBOutlet weak var itemNameText: UITextField!
+    @IBOutlet weak var itemCategoryText: UILabel!
+    @IBOutlet weak var itemDateCreatedText: UILabel!
+    @IBOutlet weak var itemDateModifiedText: UILabel!
     var delegate: ItemDetailViewControllerDelegate?
     var itemToEdit: Item?
     
@@ -19,6 +23,10 @@ class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
             itemNameText.text = itemToEdit.name
             navigationItem.title = "Edit Item"
         }
+    }
+    
+    @IBAction func addCategory() {
+        
     }
     
     @IBAction func done() {
@@ -35,6 +43,7 @@ class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
     @IBAction func cancel() {
         delegate?.ItemDetailViewControllerDidCancel(self)
     }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         itemNameText.becomeFirstResponder()
