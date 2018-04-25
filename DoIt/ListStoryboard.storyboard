@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="C0a-md-DJK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="C0a-md-DJK">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,14 +20,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <imageView key="tableHeaderView" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="7ap-Ei-DpF">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="180"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <sections>
                             <tableViewSection headerTitle="Image" id="ptE-0h-xbL">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ImageIdentifier" id="APa-LF-0fT">
-                                        <rect key="frame" x="0.0" y="205.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="235.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="APa-LF-0fT" id="WjV-zg-8G5">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -47,7 +48,7 @@
                             <tableViewSection headerTitle="Name" id="rDb-xN-lPR">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="SLh-lL-UZX">
-                                        <rect key="frame" x="0.0" y="305.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="335.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="SLh-lL-UZX" id="O99-VO-Olw">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -70,41 +71,10 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Category" id="bCB-mM-I9Q">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="CategoryIdentifier" id="pWc-jp-CeK">
-                                        <rect key="frame" x="0.0" y="405.5" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pWc-jp-CeK" id="K5f-rl-Pe4">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Select Category" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cub-Bt-PuI">
-                                                    <rect key="frame" x="16" y="12" width="312" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4F2-0V-eXJ">
-                                                    <rect key="frame" x="336" y="7" width="30" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                                                    <state key="normal" title="＋"/>
-                                                    <connections>
-                                                        <action selector="addCategory" destination="Zv6-LA-brs" eventType="touchUpInside" id="vZF-FT-SuG"/>
-                                                        <action selector="addCategory:" destination="Zv6-LA-brs" eventType="touchUpInside" id="Eza-nW-7Qy"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
                             <tableViewSection headerTitle="Dates" id="YDO-iP-R3b">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="CategoryIdentifier" id="c5z-bu-pYa">
-                                        <rect key="frame" x="0.0" y="505.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="435.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="c5z-bu-pYa" id="sKW-ex-AHR">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -128,7 +98,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="CategoryIdentifier" id="uFR-s0-boY">
-                                        <rect key="frame" x="0.0" y="549.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="479.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="uFR-s0-boY" id="TGX-bc-MBo">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -172,7 +142,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="itemCategoryText" destination="cub-Bt-PuI" id="QDC-2M-4NX"/>
                         <outlet property="itemDateCreatedText" destination="bcr-eK-Nqe" id="65K-VA-ZRk"/>
                         <outlet property="itemDateModifiedText" destination="Eog-Ij-W3r" id="DRe-OD-OVl"/>
                         <outlet property="itemImageView" destination="7ap-Ei-DpF" id="RVq-GF-VlS"/>
@@ -281,17 +250,24 @@
                         <viewLayoutGuide key="safeArea" id="nrW-Tq-8fr"/>
                     </view>
                     <navigationItem key="navigationItem" title="Todo" id="X4c-5e-P8f">
-                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="X2R-S7-mvP">
+                        <barButtonItem key="leftBarButtonItem" title="＜" id="Qh7-CB-hDG">
                             <connections>
-                                <action selector="editAction:" destination="C0a-md-DJK" id="D2K-uU-NGp"/>
+                                <action selector="back:" destination="C0a-md-DJK" id="2z5-jc-7RK"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="sC2-Wm-WJY">
-                            <connections>
-                                <action selector="addAction:" destination="C0a-md-DJK" id="TCg-WT-kzo"/>
-                                <segue destination="nFF-rM-fdx" kind="presentation" identifier="addItem" id="CTY-AS-gp3"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="sC2-Wm-WJY">
+                                <connections>
+                                    <action selector="addAction:" destination="C0a-md-DJK" id="TCg-WT-kzo"/>
+                                    <segue destination="nFF-rM-fdx" kind="presentation" identifier="addItem" id="CTY-AS-gp3"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="edit" id="X2R-S7-mvP">
+                                <connections>
+                                    <action selector="editAction:" destination="C0a-md-DJK" id="D2K-uU-NGp"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="editItemBarView" destination="X2R-S7-mvP" id="aJP-dH-vQZ"/>

@@ -23,11 +23,7 @@ class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
             itemNameText.text = itemToEdit.name
             navigationItem.title = "Edit Item"
         }
-    }
-    
-    @IBAction func addCategory() {
-        
-    }
+    }    
     
     @IBAction func done() {
         if let itemToEdit = itemToEdit {

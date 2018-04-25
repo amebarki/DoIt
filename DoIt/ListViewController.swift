@@ -11,7 +11,7 @@ import UIKit
 class ListViewController: UIViewController
 {
 
-    //MARK: variables
+    //MARK: - Variables
     var filtered = [Item]()
     var category: Category?
     var dataManagerReference = DataManager.instance
@@ -35,6 +35,10 @@ class ListViewController: UIViewController
     }
     
     //MARK: - Actions
+    @IBAction func back(_ sender: Any) {
+        
+    }
+    
     @IBAction func editAction(_ sender: Any)
     {
         tableView.isEditing = !tableView.isEditing
@@ -81,7 +85,7 @@ class ListViewController: UIViewController
 extension ListViewController: UITableViewDataSource, UITableViewDelegate
 {
     
-    //MARK:  - UITableViewDataSource
+    //MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return filtered.count
@@ -111,7 +115,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate
         filtered.append(contentsOf: dataManagerReference.moveItemAt(sourceIndexPath: sourceIndexPath, to: destinationIndexPath))
     }
     
-    //MARK:  - UITableViewDelegate
+    //MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         tableView.deselectRow(at: indexPath, animated: false)
