@@ -9,8 +9,20 @@
 import Foundation
 import CoreData
 
+
+enum Sort :String {
+    case date = "Date"
+    case nameAsc = "NameASC"
+    case nameDesc = "NameDESC"
+    case save = "Save"
+}
+
+
+
 class DataManager{
     
+    
+   
     
     //MARK: Declaration Property and variables
     var context: NSManagedObjectContext
@@ -84,14 +96,14 @@ extension DataManager
     {
         cachedCategories.removeAll()
         let fetchRequest: NSFetchRequest<Category> = NSFetchRequest(entityName: "Category")
-        if text != nil, text!.count > 0, text! != "Save"
+        if text != nil, text!.count > 0, text! != Sort.save.rawValue
         {
             
             let predicate = NSPredicate(format: "name contains[cd] %@", text!)
             fetchRequest.predicate = predicate
         }
         do{
-            if text != nil, text! == "Save"
+            if text != nil, text! == Sort.save.rawValue
             {
                 // must be review because doesn't take in account the sort by date etc ....
                 let sortDescriptor = NSSortDescriptor(key: "order", ascending: true)
@@ -157,16 +169,16 @@ extension DataManager
         return cachedItems
     }
     
-    func sortCategoryListBy(sortType: String) -> [Category]
+    func sortCategoryListBy(sortType: Sort) -> [Category]
     {
         switch sortType {
-        case "Date":
+        case Sort.date:
             cachedCategories.sort{$0.createdAt! > $1.createdAt!}
-        case "NameAsc":
+        case Sort.nameAsc:
             cachedCategories.sort{$0.name! > $1.name!}
-        case "NameDesc":
+        case Sort.nameDesc:
             cachedCategories.sort{$0.name! < $1.name!}
-        case "Save":
+        case Sort.save:
             cachedCategories.sort{$0.order < $1.order}
         default:
             return cachedCategories

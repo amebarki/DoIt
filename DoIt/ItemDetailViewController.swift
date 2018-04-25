@@ -9,6 +9,9 @@
 import UIKit
 
 class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
+    
+    let nameImage: [String] = ["sunrise.png", "sunrise2.png"]
+    var change = false;
     @IBOutlet weak var itemImageView: UIImageView!
     @IBOutlet weak var itemNameText: UITextField!
     @IBOutlet weak var itemCategoryText: UILabel!
@@ -22,6 +25,19 @@ class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
         if let itemToEdit = itemToEdit {
             itemNameText.text = itemToEdit.name
             navigationItem.title = "Edit Item"
+        }
+    }
+    
+    @IBAction func changeImage() {
+    
+        if change{
+            let image : UIImage = UIImage(named: nameImage[0])!
+            change = false
+            itemImageView.image = image
+        }else{
+            let image : UIImage = UIImage(named: nameImage[1])!
+            change = true
+            itemImageView.image = image
         }
     }
     

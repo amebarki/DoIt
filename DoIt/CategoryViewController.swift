@@ -20,7 +20,7 @@ class CategoryViewController: UIViewController {
         super.viewDidLoad()
 
         
-        filtered.append(contentsOf: dataManagerReference.loadCategoryData(text: "Save"))
+        filtered.append(contentsOf: dataManagerReference.loadCategoryData(text: Sort.save.rawValue))
                 // Do any additional setup after loading the view.
     }
 
@@ -53,18 +53,18 @@ class CategoryViewController: UIViewController {
         let alertController = UIAlertController(title:"DoIt", message:"Filter by : ", preferredStyle: .actionSheet)
         let dateAction = UIAlertAction(title: "Date", style: .default){(action) in
             self.filtered.removeAll()
-            self.filtered.append(contentsOf: self.dataManagerReference.sortCategoryListBy(sortType: "Date"))
+            self.filtered.append(contentsOf: self.dataManagerReference.sortCategoryListBy(sortType: Sort.date))
             self.tableView.reloadData()
         }
         let nameAscAction = UIAlertAction(title: "NameAsc", style : .default){(action) in
             self.filtered.removeAll()
-            self.filtered.append(contentsOf: self.dataManagerReference.sortCategoryListBy(sortType: "NameAsc"))
+            self.filtered.append(contentsOf: self.dataManagerReference.sortCategoryListBy(sortType: Sort.nameAsc))
             self.tableView.reloadData()
         }
     
         let nameDescAction = UIAlertAction(title: "NameDesc", style : .default){(action) in
             self.filtered.removeAll()
-            self.filtered.append(contentsOf: self.dataManagerReference.sortCategoryListBy(sortType: "NameDesc"))
+            self.filtered.append(contentsOf: self.dataManagerReference.sortCategoryListBy(sortType: Sort.nameDesc))
             self.tableView.reloadData()
         }
         
