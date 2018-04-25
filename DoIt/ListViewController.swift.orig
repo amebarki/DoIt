@@ -10,8 +10,6 @@ import UIKit
 
 class ListViewController: UIViewController
 {
-
-    //MARK: variables
     var filtered = [Item]()
     var category: Category?
     var dataManagerReference = DataManager.instance
@@ -189,6 +187,7 @@ extension ListViewController: UISearchBarDelegate
     }
 }
 
+<<<<<<< HEAD
 // MARK: - AddItemViewControllerDelegate
 extension ListViewController: ItemDetailViewControllerDelegate {
     
@@ -213,3 +212,6 @@ extension ListViewController: ItemDetailViewControllerDelegate {
         
     }
 }
+=======
+
+>>>>>>> adam_dev

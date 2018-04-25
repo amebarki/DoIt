@@ -20,10 +20,9 @@ class DataManager{
     
     private var cachedItems = [Item]()
     private var cachedCategories = [Category]()
-    
     static let instance = DataManager()
     
-    
+   
     
 
     func saveData()
@@ -88,30 +87,22 @@ extension DataManager
         {
             let predicate = NSPredicate(format: "name contains[cd] %@", text!)
             fetchRequest.predicate = predicate
-            do{
-                cachedCategories = try context.fetch(fetchRequest)
-            }catch{
-                print("error")
-            }
+            
         }
-        else
-        {
-            cachedCategories.removeAll()
-            do
-            {
-                let fetchedResults = try  context.fetch(fetchRequest)
-                cachedCategories = fetchedResults
-            }
-            catch let error as NSError
-            {
-                debugPrint("Could not fetch : \(error)")
-            }
+            
+        do{
+            cachedCategories = try context.fetch(fetchRequest)
+        }catch{
+            print("error")
         }
         return cachedCategories
     }
     
-    func addCategoryData(category: Category)
+    func addCategoryData(nameCategory: String)
     {
+        let category = Category(context: DataManager.instance.context)
+        category.name = nameCategory
+        category.createdAt = Date()
         cachedCategories.append(category)
         saveData()
     }
@@ -132,7 +123,7 @@ extension DataManager
     func retrieveCategoryItemsData(categoryName: String) -> [Item]
     {
         let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
-        let predicate = NSPredicate(format: "category == %@", categoryName)
+        let predicate = NSPredicate(format: "%K == %@", #keyPath(Item.category.name),categoryName)
         fetchRequest.predicate = predicate
         do{
             cachedItems = try context.fetch(fetchRequest)
@@ -141,6 +132,8 @@ extension DataManager
         }
         return cachedItems
     }
+    
+
 }
 
 
@@ -156,36 +149,28 @@ extension DataManager
     
     func loadItemsData(text:String? = "") -> [Item]
     {
+        let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
         if text != nil, text!.count > 0
         {
-            let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
             let predicate = NSPredicate(format: "name contains[cd] %@", text!)
             fetchRequest.predicate = predicate
-            do{
-                cachedItems = try context.fetch(fetchRequest)
-            }catch{
-                print("error")
-            }
         }
-        else
-        {
-            cachedItems.removeAll()
-            let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
-            do
-            {
-                let fetchedResults = try  persistentContainer.viewContext.fetch(fetchRequest)
-                cachedItems = fetchedResults
-            }
-            catch let error as NSError
-            {
-                debugPrint("Could not fetch : \(error)")
-            }
+
+        do{
+            cachedItems = try context.fetch(fetchRequest)
+        }catch{
+            print("error")
         }
+
         return cachedItems
     }
     
-    func addItemData(item:Item)
+    
+    func addItemData(nameItem: String)
     {
+        let item = Item(context: DataManager.instance.context)
+        item.name = nameItem
+        item.checked = false
         cachedItems.append(item)
         saveData()
     }
