@@ -216,6 +216,7 @@ extension DataManager
         item.name = nameItem
         item.checked = false
         item.category = category
+        item.createdAt = Date()
         cachedItems.append(item)
         saveData()
     }

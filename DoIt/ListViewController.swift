@@ -31,8 +31,10 @@ class ListViewController: UIViewController
         // in the case where it didn't specify in the storyboard
         //tableView.dataSource = self
         //tableView.delegate = self
-        
-        filtered.append(contentsOf: dataManagerReference.loadItemsData(text: category?.name))
+        if(category != nil)
+        {
+            filtered.append(contentsOf: dataManagerReference.retrieveCategoryItemsData(category: category!))
+        }
         
     }
     
@@ -47,12 +49,12 @@ class ListViewController: UIViewController
         if(tableView.isEditing)
         {
             let doneButtonView = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(editAction(_:)))
-            navigationItem.setLeftBarButton(doneButtonView, animated: true)
+            navigationItem.setRightBarButton(doneButtonView, animated: true)
         }
         else
         {
             let editButtonView = UIBarButtonItem(barButtonSystemItem: .edit , target: self, action: #selector(editAction(_:)))
-            navigationItem.setLeftBarButton(editButtonView, animated: true)
+            navigationItem.setRightBarButton(editButtonView, animated: true)
         }
     }
     
@@ -155,13 +157,13 @@ extension ListViewController {
     func configureCategorie(for cell: UITableViewCell, withItem item: Item) {
         let myCell = cell as! ItemCell
         //TODO: myCell.itemCategorie.text = item.categorie
-        myCell.itemCategory.text = "Catégorie"
+        myCell.itemCategory.text = item.category?.name
     }
     
     func configureDate(for cell: UITableViewCell, withItem item: Item) {
         let myCell = cell as! ItemCell
         //TODO: myCell.itemDate.text = item.date
-        myCell.itemDate.text = "Date"
+        myCell.itemDate.text = item.createdAt?.description
     }
     
     
@@ -172,6 +174,7 @@ extension ListViewController {
             let destVC = navVC.topViewController as? ItemDetailViewController
         {
             destVC.delegate = self
+            destVC.category = category
         }
     }
 }
@@ -196,7 +199,7 @@ extension ListViewController: UISearchBarDelegate
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if(searchText == ""){
             filtered.removeAll()
-            filtered.append(contentsOf: dataManagerReference.loadItemsData())
+            filtered.append(contentsOf: dataManagerReference.retrieveCategoryItemsData(category: category!))
         }
         else{
             //filtered = dataManagerReference.filter(searchBarText: searchText)
@@ -213,10 +216,10 @@ extension ListViewController: ItemDetailViewControllerDelegate {
         controller.dismiss(animated: true)
     }
     
-    func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishAddingItem item: Item) {
-        filtered.append(item)
+    func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishAddingItem item: String) {
+        filtered.removeAll()
+        filtered.append(contentsOf: dataManagerReference.retrieveCategoryItemsData(category: category!))
         tableView.reloadData()
-        
         //TODO TODO TODO TODO
         controller.dismiss(animated: true)
     }

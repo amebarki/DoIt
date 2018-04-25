@@ -23,22 +23,26 @@ class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
             itemNameText.text = itemToEdit.name
             navigationItem.title = "Edit Item"
         }
-    }    
+    }
     
     @IBAction func done() {
         if let itemToEdit = itemToEdit {
             itemToEdit.name = itemNameText.text!
             delegate?.ItemDetailViewController(self, didFinishEditingItem: itemToEdit)
         } else {
-            //DataManager.instance.addItemData(nameItem: itemNameText.text!, category: category!)
-            let item = Item(context: DataManager.instance.persistentContainer.viewContext)
-            item.name = itemNameText.text
-            delegate?.ItemDetailViewController(self, didFinishAddingItem: item)
+            if category != nil
+            {
+                DataManager.instance.addItemData(nameItem: itemNameText.text!, category: category!)
+                delegate?.ItemDetailViewController(self, didFinishAddingItem: itemNameText.text!)
+            }
+           // let item = Item(context: DataManager.instance.persistentContainer.viewContext)
+           // item.name = itemNameText.text
         }
     }
     
     @IBAction func cancel() {
         delegate?.ItemDetailViewControllerDidCancel(self)
+       // navigationController?.popViewController(animated: true)
     }
     
     
@@ -69,6 +73,6 @@ class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
 
 protocol ItemDetailViewControllerDelegate : class {
     func ItemDetailViewControllerDidCancel(_ controller: ItemDetailViewController)
-    func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishAddingItem item: Item)
+    func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishAddingItem item: String)
     func ItemDetailViewController(_ controller: ItemDetailViewController, didFinishEditingItem item: Item)
 }
