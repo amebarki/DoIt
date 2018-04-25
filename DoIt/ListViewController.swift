@@ -31,7 +31,9 @@ class ListViewController: UIViewController
         // in the case where it didn't specify in the storyboard
         //tableView.dataSource = self
         //tableView.delegate = self
-        filtered.append(contentsOf: dataManagerReference.loadItemsData())
+        
+        filtered.append(contentsOf: dataManagerReference.loadItemsData(text: category?.name))
+        
     }
     
     //MARK: - Actions
@@ -60,7 +62,7 @@ class ListViewController: UIViewController
             
             if textField.text != "" {
               
-                self.dataManagerReference.addItemData(nameItem: textField.text!)
+                self.dataManagerReference.addItemData(nameItem: textField.text!, category: self.category!)
                 self.filtered.removeAll()
                 self.filtered.append(contentsOf: self.dataManagerReference.loadItemsData(text: self.searchBarView.text!))
                 self.tableView.reloadData()

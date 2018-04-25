@@ -15,9 +15,6 @@ class CategoryViewController: UIViewController {
     
     var dataManagerReference = DataManager.instance
     var filtered = [Category]()
-
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +33,7 @@ class CategoryViewController: UIViewController {
             let textField = alertController.textFields![0]
             
             if textField.text != "" {
+                
                 self.dataManagerReference.addCategoryData(nameCategory: textField.text!)
                 self.filtered.removeAll()
                 self.filtered.append(contentsOf: self.dataManagerReference.loadCategoryData(text: self.searchBarView.text!))
@@ -53,6 +51,17 @@ class CategoryViewController: UIViewController {
     
     
     @IBAction func FilterAction(_ sender: Any) {
+        let alertController = UIAlertController(title:"DoIt", message:"Filter by : ", preferredStyle: .actionSheet)
+        let dateAction = UIAlertAction(title: "Date", style: .default){(action) in
+            print("dateAction")
+        }
+        let nameAction = UIAlertAction(title: "Name", style : .default){(action) in
+            print("nameAction")
+        }
+    
+        alertController.addAction(dateAction)
+        alertController.addAction(nameAction)
+        present(alertController, animated: true, completion: nil)
     }
     
 
@@ -98,7 +107,16 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate
         dataManagerReference.saveData()
         
         let storyboard = UIStoryboard(name:"ListStoryboard",bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "listViewController")
+        let vc = storyboard.instantiateViewController(withIdentifier: "listViewController") as! ListViewController
+        if filtered.count != 0
+        {
+            vc.category = filtered[indexPath.row]
+        }
+        else
+        {
+            vc.category = Category()
+            vc.category?.name = "None"
+        }
         navigationController?.pushViewController(vc, animated: true)
     
         
