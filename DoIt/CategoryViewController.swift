@@ -97,6 +97,11 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate
         tableView.reloadRows(at: [indexPath], with: .automatic)
         dataManagerReference.saveData()
         
+        let storyboard = UIStoryboard(name:"ListStoryboard",bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "listViewController")
+        navigationController?.pushViewController(vc, animated: true)
+    
+        
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
