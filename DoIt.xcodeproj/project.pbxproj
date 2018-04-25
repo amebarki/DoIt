@@ -64,14 +64,14 @@
 			children = (
 				B87BCBBA206E1FF200FF4FA6 /* AppDelegate.swift */,
 				B87BCBBC206E1FF200FF4FA6 /* ListViewController.swift */,
+				B87111DF2077AEBD000ED3A8 /* CategoryViewController.swift */,
+				B87BCBD3206E7BB900FF4FA6 /* DataManager.swift */,
+				B87BCBD1206E314300FF4FA6 /* Item.swift */,
 				B87BCBBE206E1FF200FF4FA6 /* Main.storyboard */,
 				B87BCBC4206E1FF200FF4FA6 /* Assets.xcassets */,
 				B87BCBC6206E1FF200FF4FA6 /* LaunchScreen.storyboard */,
 				B87BCBC9206E1FF200FF4FA6 /* Info.plist */,
 				B87BCBC1206E1FF200FF4FA6 /* DoIt.xcdatamodeld */,
-				B87BCBD1206E314300FF4FA6 /* Item.swift */,
-				B87BCBD3206E7BB900FF4FA6 /* DataManager.swift */,
-				B87111DF2077AEBD000ED3A8 /* CategoryViewController.swift */,
 			);
 			path = DoIt;
 			sourceTree = "<group>";

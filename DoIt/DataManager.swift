@@ -20,7 +20,6 @@ class DataManager{
     
     private var cachedItems = [Item]()
     private var cachedCategories = [Category]()
-    
     static let instance = DataManager()
     
    
