@@ -82,48 +82,68 @@ extension DataManager
 {
     func loadCategoryData(text:String? = "") ->[Category]
     {
+        cachedCategories.removeAll()
         let fetchRequest: NSFetchRequest<Category> = NSFetchRequest(entityName: "Category")
-        if text != nil, text!.count > 0
+        if text != nil, text!.count > 0, text! != "Save"
         {
             let predicate = NSPredicate(format: "name contains[cd] %@", text!)
             fetchRequest.predicate = predicate
-            
         }
-            
         do{
             cachedCategories = try context.fetch(fetchRequest)
+            if text != nil, text! == "Save"
+            {
+                cachedCategories.sort{$0.order < $1.order}
+            }
         }catch{
             print("error")
         }
         return cachedCategories
     }
     
-    func addCategoryData(nameCategory: String)
+    func addCategoryData(nameCategory: String, order: Int64)
     {
         let category = Category(context: DataManager.instance.context)
         category.name = nameCategory
         category.createdAt = Date()
+        category.order = order
         cachedCategories.append(category)
         saveData()
     }
     
+    func updateCategoryDataOrder(name: String,order: Int64)
+    {
+        let fetchRequest = NSFetchRequest<Category>(entityName: "Category")
+        fetchRequest.predicate = NSPredicate(format: "name contains[cd] %@", name)
+        do{
+            let fetchResults = try context.fetch(fetchRequest)
+            let categoryData = fetchResults[0]
+            categoryData.setValue(order, forKey: "order")
+            saveData()
+        }catch{
+            print("error")
+        }
+    }
+    
     func deleteCategoryData(category: Category)
     {
-        if let index = cachedCategories.index(where: { (anCategory) -> Bool in
+        // reload cachedcategories
+        /*if let index = cachedCategories.index(where: { (anCategory) -> Bool in
             return anCategory === category
         })
         {
             cachedCategories.remove(at: index)
-        }
+        }*/
         context.delete(category)
         self.saveData()
+        cachedCategories.append(contentsOf: loadCategoryData())
     }
     
     
-    func retrieveCategoryItemsData(categoryName: String) -> [Item]
+    func retrieveCategoryItemsData(category: Category) -> [Item]
     {
-        let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
-        let predicate = NSPredicate(format: "%K == %@", #keyPath(Item.category.name),categoryName)
+        let fetchRequest: NSFetchRequest<Item> = Item.fetchRequest()
+        let predicate = NSPredicate(format: "%K == %@", #keyPath(Item.category),category)
         fetchRequest.predicate = predicate
         do{
             cachedItems = try context.fetch(fetchRequest)
@@ -133,7 +153,27 @@ extension DataManager
         return cachedItems
     }
     
-
+    func sortCategoryListBy(sortType: String) -> [Category]
+    {
+        switch sortType {
+        case "Date":
+            cachedCategories.sort{$0.createdAt! > $1.createdAt!}
+        case "NameAsc":
+            cachedCategories.sort{$0.name! > $1.name!}
+        case "NameDesc":
+            cachedCategories.sort{$0.name! < $1.name!}
+        case "Save":
+            cachedCategories.sort{$0.order < $1.order}
+        default:
+            return cachedCategories
+        }
+        var index = 0
+        for category in cachedCategories {
+            updateCategoryDataOrder(name: category.name!, order: Int64(index))
+            index = index + 1
+        }
+        return cachedCategories
+    }
 }
 
 
@@ -149,6 +189,7 @@ extension DataManager
     
     func loadItemsData(text:String? = "") -> [Item]
     {
+        cachedItems.removeAll()
         let fetchRequest: NSFetchRequest<Item> = NSFetchRequest(entityName: "Item")
         if text != nil, text!.count > 0
         {
@@ -161,16 +202,16 @@ extension DataManager
         }catch{
             print("error")
         }
-
         return cachedItems
     }
     
     
-    func addItemData(nameItem: String)
+    func addItemData(nameItem: String, category : Category)
     {
         let item = Item(context: DataManager.instance.context)
         item.name = nameItem
         item.checked = false
+        item.category = category
         cachedItems.append(item)
         saveData()
     }
@@ -186,12 +227,6 @@ extension DataManager
         }
         context.delete(item)
         self.saveData()
-    }
-    
-    
-    func retrieveItemData(index: Int) -> Item
-    {
-        return cachedItems[index]
     }
 }
 

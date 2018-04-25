@@ -51,7 +51,7 @@
                     <navigationItem key="navigationItem" title="Categories" id="gtm-nn-Fma">
                         <barButtonItem key="leftBarButtonItem" systemItem="organize" id="uSS-As-Pc3">
                             <connections>
-                                <action selector="FilterAction:" destination="s2o-wh-dS3" id="in8-LS-zFf"/>
+                                <action selector="SortAction:" destination="s2o-wh-dS3" id="in8-LS-zFf"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="F3x-SE-9oa">

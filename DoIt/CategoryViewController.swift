@@ -15,17 +15,13 @@ class CategoryViewController: UIViewController {
     
     var dataManagerReference = DataManager.instance
     var filtered = [Category]()
-
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         
-        filtered.append(contentsOf: dataManagerReference.loadCategoryData())
-
-        // Do any additional setup after loading the view.
+        filtered.append(contentsOf: dataManagerReference.loadCategoryData(text: "Save"))
+                // Do any additional setup after loading the view.
     }
 
     @IBAction func addAction(_ sender: Any) {
@@ -36,7 +32,8 @@ class CategoryViewController: UIViewController {
             let textField = alertController.textFields![0]
             
             if textField.text != "" {
-                self.dataManagerReference.addCategoryData(nameCategory: textField.text!)
+                let order = self.filtered.count + 1
+                self.dataManagerReference.addCategoryData(nameCategory: textField.text!,order: Int64(order))
                 self.filtered.removeAll()
                 self.filtered.append(contentsOf: self.dataManagerReference.loadCategoryData(text: self.searchBarView.text!))
                 self.tableView.reloadData()
@@ -52,7 +49,29 @@ class CategoryViewController: UIViewController {
     }
     
     
-    @IBAction func FilterAction(_ sender: Any) {
+    @IBAction func SortAction(_ sender: Any) {
+        let alertController = UIAlertController(title:"DoIt", message:"Filter by : ", preferredStyle: .actionSheet)
+        let dateAction = UIAlertAction(title: "Date", style: .default){(action) in
+            self.filtered.removeAll()
+            self.filtered.append(contentsOf: self.dataManagerReference.sortCategoryListBy(sortType: "Date"))
+            self.tableView.reloadData()
+        }
+        let nameAscAction = UIAlertAction(title: "NameAsc", style : .default){(action) in
+            self.filtered.removeAll()
+            self.filtered.append(contentsOf: self.dataManagerReference.sortCategoryListBy(sortType: "NameAsc"))
+            self.tableView.reloadData()
+        }
+    
+        let nameDescAction = UIAlertAction(title: "NameDesc", style : .default){(action) in
+            self.filtered.removeAll()
+            self.filtered.append(contentsOf: self.dataManagerReference.sortCategoryListBy(sortType: "NameDesc"))
+            self.tableView.reloadData()
+        }
+        
+        alertController.addAction(dateAction)
+        alertController.addAction(nameAscAction)
+        alertController.addAction(nameDescAction)
+        present(alertController, animated: true, completion: nil)
     }
     
 
@@ -98,7 +117,16 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate
         dataManagerReference.saveData()
         
         let storyboard = UIStoryboard(name:"ListStoryboard",bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "listViewController")
+        let vc = storyboard.instantiateViewController(withIdentifier: "listViewController") as! ListViewController
+        if filtered.count != 0
+        {
+            vc.category = filtered[indexPath.row]
+        }
+        else
+        {
+            vc.category = Category()
+            vc.category?.name = "None"
+        }
         navigationController?.pushViewController(vc, animated: true)
     
         
