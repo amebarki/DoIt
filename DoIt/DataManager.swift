@@ -86,15 +86,19 @@ extension DataManager
         let fetchRequest: NSFetchRequest<Category> = NSFetchRequest(entityName: "Category")
         if text != nil, text!.count > 0, text! != "Save"
         {
+            
             let predicate = NSPredicate(format: "name contains[cd] %@", text!)
             fetchRequest.predicate = predicate
         }
         do{
-            cachedCategories = try context.fetch(fetchRequest)
             if text != nil, text! == "Save"
             {
-                cachedCategories.sort{$0.order < $1.order}
+                // must be review because doesn't take in account the sort by date etc ....
+                let sortDescriptor = NSSortDescriptor(key: "order", ascending: true)
+                fetchRequest.sortDescriptors = [sortDescriptor]
             }
+            cachedCategories = try context.fetch(fetchRequest)
+
         }catch{
             print("error")
         }

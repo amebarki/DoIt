@@ -122,11 +122,7 @@ extension CategoryViewController: UITableViewDataSource, UITableViewDelegate
         {
             vc.category = filtered[indexPath.row]
         }
-        else
-        {
-            vc.category = Category()
-            vc.category?.name = "None"
-        }
+        
         navigationController?.pushViewController(vc, animated: true)
     
         

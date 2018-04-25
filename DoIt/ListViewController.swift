@@ -163,6 +163,17 @@ extension ListViewController {
         //TODO: myCell.itemDate.text = item.date
         myCell.itemDate.text = "Date"
     }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let identifier = segue.identifier,
+            identifier == "addItem",
+            let navVC = segue.destination as? UINavigationController,
+            let destVC = navVC.topViewController as? ItemDetailViewController
+        {
+            destVC.delegate = self
+        }
+    }
 }
 
 extension ListViewController: UISearchBarDelegate

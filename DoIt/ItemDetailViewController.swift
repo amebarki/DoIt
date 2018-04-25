@@ -16,7 +16,7 @@ class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
     @IBOutlet weak var itemDateModifiedText: UILabel!
     var delegate: ItemDetailViewControllerDelegate?
     var itemToEdit: Item?
-    
+    var category: Category?
     override func viewDidLoad() {
         super.viewDidLoad()
         if let itemToEdit = itemToEdit {
@@ -30,7 +30,8 @@ class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
             itemToEdit.name = itemNameText.text!
             delegate?.ItemDetailViewController(self, didFinishEditingItem: itemToEdit)
         } else {
-            var item = Item(context: DataManager.instance.persistentContainer.viewContext)
+            //DataManager.instance.addItemData(nameItem: itemNameText.text!, category: category!)
+            let item = Item(context: DataManager.instance.persistentContainer.viewContext)
             item.name = itemNameText.text
             delegate?.ItemDetailViewController(self, didFinishAddingItem: item)
         }
